@@ -33,13 +33,12 @@ export class StartQuiz {
 
   isTimerEnable:boolean = this.sharedService.isTimerEnable()
    
-  // answerSeat:SubmitAnswer[] = []
-  // answerMark:{"qid":number, "option":string , currentQuestion:number}[]=[]
+
 
   ngOnInit(){
 debugger
 
-    this.routs
+
 this.activeRoute.fragment.subscribe(fragment => {
    this.isReview = fragment === 'review';
 });
@@ -152,8 +151,6 @@ totalMinut=0
   submitQuiz(){
 
     this.api.CheckAnswer(this.sharedService.answerSeat).subscribe((data:any)=>{
-        console.log(data)
-    debugger
            let  numbercurrectAns = data.data.filter((a:any)=>a.ans).length
            this.sharedService.NumberOfCurrectQuestion.set(numbercurrectAns)
            console.log(this.sharedService.NumberOfCurrectQuestion())
