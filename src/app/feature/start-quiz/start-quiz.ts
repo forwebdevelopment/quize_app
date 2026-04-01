@@ -2,7 +2,9 @@ import { Component, inject , ChangeDetectorRef  } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Shared } from '../../shared/shared';
-import { Router } from '@angular/router';
+import { Route, Router, ActivatedRoute } from '@angular/router';
+import { Api } from '../../core/api';
+import { ResponseAnswer, SubmitAnswer } from '../../models/models';
 @Component({
   selector: 'app-start-quiz',
   imports: [CommonModule],
@@ -12,7 +14,7 @@ import { Router } from '@angular/router';
 export class StartQuiz {
 
   sharedService:Shared = inject(Shared)
-  constructor(private cd:ChangeDetectorRef , private routs:Router ){
+  constructor(private cd:ChangeDetectorRef , private routs:Router , private activeRoute:ActivatedRoute,  private api:Api){
 
   }
  currentQuestion = 1;
@@ -25,14 +27,22 @@ export class StartQuiz {
   questions:any[] = []
   question:any
   selectedOption: string | null = null;
+  AtteptQuestion:number = 0
+  isReview:boolean = false;
 
 
   isTimerEnable:boolean = this.sharedService.isTimerEnable()
    
-  answerSeat:{"queNo": number, "option": string}[] = []
-  answerMark:{"queNo":number, "option":string , currentQuestion:number}[]=[]
+  // answerSeat:SubmitAnswer[] = []
+  // answerMark:{"qid":number, "option":string , currentQuestion:number}[]=[]
 
   ngOnInit(){
+debugger
+
+    this.routs
+this.activeRoute.fragment.subscribe(fragment => {
+   this.isReview = fragment === 'review';
+});
 
 this.questions=[]
     this.sharedService.QuizResponse()?.data.forEach((element:any) => {
@@ -94,23 +104,24 @@ totalMinut=0
 
   selectOption(option: string , quesNo:number , currentQue:any) {
 
-     var index = this.answerSeat.findIndex(x=>x.queNo==quesNo)
+     var index = this.sharedService.answerSeat.findIndex(x=>x.qid==quesNo)
      if(index>-1){
-          this.answerSeat[index].option=option
-           this.answerMark[index].option=option
+          this.sharedService.answerSeat[index].option=option
+           this.sharedService.answerMark[index].option=option
      }else{
 
-    this.answerSeat.push({
-      queNo:quesNo,
+    this.sharedService.answerSeat.push({
+      qid:quesNo,
       option:option
     })
-    this.answerMark.push({
-       queNo:quesNo,
+    this.sharedService.answerMark.push({
+       qid:quesNo,
        option:option,
        currentQuestion:currentQue
     })
   }
-    console.log(this.answerSeat)
+  this.AtteptQuestion = this.sharedService.answerSeat.length
+    console.log(this.sharedService.answerSeat)
     this.selectedOption = option;
   }
 
@@ -119,28 +130,37 @@ totalMinut=0
       this.currentQuestion++;
       this.question = this.questions[this.currentQuestion-1]
          
-     var index = this.answerMark.findIndex(x=>x.currentQuestion == this.currentQuestion)
+     var index = this.sharedService.answerMark.findIndex(x=>x.currentQuestion == this.currentQuestion)
      if(index>-1){
-          this.selectedOption=this.answerMark[index].option
+          this.selectedOption=this.sharedService.answerMark[index].option
      }
     }
   }
 
   previousQuestion() {
-    debugger
     if (this.currentQuestion > 1) {
       this.currentQuestion--;
         this.question = this.questions[this.currentQuestion-1]
         
-     var index = this.answerMark.findIndex(x=>x.currentQuestion == this.currentQuestion)
+     var index = this.sharedService.answerMark.findIndex(x=>x.currentQuestion == this.currentQuestion)
      if(index>-1){
-          this.selectedOption=this.answerMark[index].option
+          this.selectedOption=this.sharedService.answerMark[index].option
      }
     }
   }
 
   submitQuiz(){
-    this.routs.navigate(['result'])
+
+    this.api.CheckAnswer(this.sharedService.answerSeat).subscribe((data:any)=>{
+        console.log(data)
+    debugger
+           let  numbercurrectAns = data.data.filter((a:any)=>a.ans).length
+           this.sharedService.NumberOfCurrectQuestion.set(numbercurrectAns)
+           console.log(this.sharedService.NumberOfCurrectQuestion())
+           this.routs.navigate(['result'])
+    })
+    
+
   }
 
 }

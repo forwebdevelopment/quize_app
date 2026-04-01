@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Shared } from '../../shared/shared';
 
 @Component({
   selector: 'app-results',
@@ -10,13 +11,22 @@ import { Router } from '@angular/router';
 export class Results {
  totalQuestions = 100;
   correctAnswers = 85;
-  score = Math.round((this.correctAnswers / this.totalQuestions) * 100);
+  score:number=0
+  constructor(private router: Router , public shared:Shared)
+  {
 
-  constructor(private router: Router) {}
 
+
+  }
+
+  ngOnInit(){
+
+  this.score = Math.round((this.shared.NumberOfCurrectQuestion() /this.shared.NumberOfQuestion()) * 100);
+  }
   reviewAnswers() {
     // Navigate to review page (you can define a route like /review)
-    this.router.navigate(['/review']);
+
+    this.router.navigate(['/quiz_start'] ,{fragment:'review'});
   }
 
 }

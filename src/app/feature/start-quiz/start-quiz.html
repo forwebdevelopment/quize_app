@@ -21,9 +21,9 @@
     <button (click)="previousQuestion()">Previous</button>
 
     @if ( this.totalQuestions!=this.currentQuestion) {
-        <button (click)="submitQuiz()">Exit Quiz</button>
+        <button (click)="submitQuiz()" [disabled]="AtteptQuestion==0">Submit Quiz</button>
     }
-    @if ( this.totalQuestions==this.currentQuestion) {
+    @if ( this.totalQuestions==this.currentQuestion ) {
         <button (click)="submitQuiz()">Submit Quiz</button>
     }@else{
         <button (click)="nextQuestion()">Next</button>

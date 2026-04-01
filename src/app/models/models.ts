@@ -52,3 +52,13 @@ export interface QuizData {
   option3: string;
   option4: string;
 }
+
+export interface SubmitAnswer{
+  qid:number
+  option:string
+}
+export interface ResponseAnswer{
+  qid:number
+  correctAns:string,
+  ans:boolean
+}

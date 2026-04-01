@@ -4,11 +4,11 @@
   <div class="score-summary">
     <div class="summary-card">
       <p class="label">Total Questions</p>
-      <p class="value">{{ totalQuestions }}</p>
+      <p class="value">{{ this.shared.NumberOfQuestion() }}</p>
     </div>
     <div class="summary-card">
       <p class="label">Correct Answers</p>
-      <p class="value">{{ correctAnswers }}</p>
+      <p class="value">{{ this.shared.NumberOfCurrectQuestion() }}</p>
     </div>
     <div class="summary-card">
       <p class="label">Score</p>

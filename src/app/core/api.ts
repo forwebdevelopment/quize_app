@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import {enviroment} from '../../envinroments/environment'
 import { HttpClient , HttpHeaders } from "@angular/common/http";
-import { TenantDataResponse } from "../models/models";
+import { ResponseAnswer, SubmitAnswer, TenantDataResponse } from "../models/models";
 @Injectable(
     {
         providedIn:'root'
@@ -40,7 +40,13 @@ export class Api{
 
 
     GetQuizByFilter(levelID:number , subjectId:number , numberofquiz:number){
-        const url = `${this.apiUrl}Quiz/?levelId=${levelID}&subjectId=${subjectId}&NumberQuize=${numberofquiz}`
+        const url = `${this.apiUrl}QuizUser/getquiz/?levelId=${levelID}&subjectId=${subjectId}&NumberQuize=${numberofquiz}`
         return this.http.get(url)
+    }
+
+
+    CheckAnswer(list: SubmitAnswer[]){
+      const url = `${this.apiUrl}QuizUser/checkanswer`
+      return this.http.post<ResponseAnswer[]>(url ,list )
     }
 }
