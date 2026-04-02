@@ -7,7 +7,7 @@
 
   <div class="question-block">
     
-    <h2>Q{{ currentQuestion }}. {{ question.text }}</h2>
+    <h2>Q{{ currentQuestion }}. {{ question.text }}  @if(this.isReview){ <button  (click)="openPopup(true)">View Definiton</button>}</h2>
     <ul class="options-list">
       <li *ngFor="let option of question.options"
           [class.selected]="selectedOption === option"
@@ -20,7 +20,7 @@
   <div class="navigation-buttons">
     <button (click)="previousQuestion()">Previous</button>
 
-    @if ( this.totalQuestions!=this.currentQuestion) {
+    @if ( this.totalQuestions!=this.currentQuestion && !this.isReview ) {
         <button (click)="submitQuiz()" [disabled]="AtteptQuestion==0">Submit Quiz</button>
     }
     @if ( this.totalQuestions==this.currentQuestion ) {
@@ -29,5 +29,21 @@
         <button (click)="nextQuestion()">Next</button>
       }
    
+  </div>
+
+  
+
+
+</div>
+
+<div class="popup-overlay" *ngIf="isOpen">
+  <div class="popup-content">
+    <button class="close-btn" (click)="openPopup(false)">✖</button>
+    <iframe 
+      [src]="safeUrl" 
+      width="100%" 
+      height="500" 
+      frameborder="0">
+    </iframe>
   </div>
 </div>

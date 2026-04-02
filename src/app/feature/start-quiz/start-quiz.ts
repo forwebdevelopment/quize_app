@@ -5,6 +5,7 @@ import { Shared } from '../../shared/shared';
 import { Route, Router, ActivatedRoute } from '@angular/router';
 import { Api } from '../../core/api';
 import { ResponseAnswer, SubmitAnswer } from '../../models/models';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-start-quiz',
   imports: [CommonModule],
@@ -14,7 +15,7 @@ import { ResponseAnswer, SubmitAnswer } from '../../models/models';
 export class StartQuiz {
 
   sharedService:Shared = inject(Shared)
-  constructor(private cd:ChangeDetectorRef , private routs:Router , private activeRoute:ActivatedRoute,  private api:Api){
+  constructor(private cd:ChangeDetectorRef , private routs:Router , private activeRoute:ActivatedRoute,  private api:Api , private sanitizer: DomSanitizer){
 
   }
  currentQuestion = 1;
@@ -26,10 +27,12 @@ export class StartQuiz {
   timer = '00:00:00';
   questions:any[] = []
   question:any
+  isOpen:boolean = false
   selectedOption: string | null = null;
   AtteptQuestion:number = 0
   isReview:boolean = false;
-
+url:string = "https://anotepad.com/note/read/ipwpq3xd"
+safeUrl!: SafeResourceUrl;
 
   isTimerEnable:boolean = this.sharedService.isTimerEnable()
    
@@ -37,6 +40,7 @@ export class StartQuiz {
 
   ngOnInit(){
 debugger
+ this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
 
 
 this.activeRoute.fragment.subscribe(fragment => {
@@ -160,4 +164,8 @@ totalMinut=0
 
   }
 
+
+  openPopup(isOpenP:boolean){
+      this.isOpen = isOpenP
+  }
 }
