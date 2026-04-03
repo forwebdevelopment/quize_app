@@ -3,9 +3,13 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ɵEmptyOutletComponent, RouterLink, Router } from "@angular/router";
 import { Shared } from '../../shared/shared';
-import { Level, Subject } from '../../models/models';
+import { Level, Subject, SubSubject } from '../../models/models';
 import { Api } from '../../core/api';
 import { LoaderService } from '../../core/loader';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { loadSubSubjects } from '../../core/action/subsubject.action';
+import { selectSubSubjectsBySubjectId } from '../../core/selector/subsubject.selectors';
 
 @Component({
   selector: 'app-quiz-filter',
@@ -21,6 +25,8 @@ export class QuizFilter {
    syllabus: Subject[]=[]
    level:Level[]=[]
   numberOfQuestions:number = 10
+    subSubjects$!: Observable<SubSubject[]>;
+
  filters = {
     category: 'Tech',
     level: 'Select Level',
@@ -32,7 +38,7 @@ export class QuizFilter {
 
  
 
-  constructor(private cd:ChangeDetectorRef , private routs:Router , private api:Api , private loaderService: LoaderService) {
+  constructor(private cd:ChangeDetectorRef , private routs:Router , private api:Api , private loaderService: LoaderService ,private store: Store) {
 
   }
   ngOnInit(){
@@ -45,6 +51,63 @@ export class QuizFilter {
 
 
 
+
+  quizzes = [
+    {
+      title: 'Java Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'c# Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'Angualr Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'Angualr Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'Angualr Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'Angualr Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'Angualr Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'Angualr Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    },
+     {
+      title: 'Angualr Basics',
+      level: 'Beginner',
+      questions: 10,
+      timer: 10
+    }
+  ];
 
 
 
@@ -114,7 +177,20 @@ enterTime(){
 
   }
 
+isSubQuiz:boolean = false;
 
+  getSubQuizCard(val:boolean){
+     const subjectId = 120; // Example
+    this.store.dispatch(loadSubSubjects({ subjectId }));
+    this.subSubjects$ = this.store.select(selectSubSubjectsBySubjectId(subjectId));
+this.subSubjects$.subscribe(data => {
+      console.log('Response from store:', data);
+    });
+
+ this.isSubQuiz = val
+
+
+  }
 
   getQuiz(data:any){
 

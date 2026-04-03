@@ -1,7 +1,8 @@
 import { inject, Injectable } from "@angular/core";
 import {enviroment} from '../../envinroments/environment'
 import { HttpClient , HttpHeaders } from "@angular/common/http";
-import { ResponseAnswer, SubmitAnswer, TenantDataResponse } from "../models/models";
+import { ResponseAnswer, SubmitAnswer, SubSubject, TenantDataResponse } from "../models/models";
+import { Observable } from "rxjs";
 @Injectable(
     {
         providedIn:'root'
@@ -49,4 +50,11 @@ export class Api{
       const url = `${this.apiUrl}QuizUser/checkanswer`
       return this.http.post<ResponseAnswer[]>(url ,list )
     }
+
+
+      GetSubSubject(subjectId : number):Observable<SubSubject[]>{
+        const url = `${this.apiUrl}Tenant/subsubject?SubjectId=${subjectId}`
+        return this.http.get<SubSubject[]>(url)
+      }
+
 }

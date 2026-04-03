@@ -74,11 +74,13 @@
   </aside>
 
 
+  @if (true) {
+
   <section class="quiz-results">
     <h3>Filtered Quizzes</h3>
     <div class="quiz-main" >
       @for (quiz of this.sharedService.TenantData()?.card; track $index) {
-       <div class="quiz-card"  (click)="getQuiz(quiz)">
+       <div class="quiz-card"  (click)="getSubQuizCard(true)">
          <h4>{{ quiz.heading }}</h4>
          <p>Category: {{ quiz.catName }}</p>
          <p>Level: {{ quiz.levelName }}</p>
@@ -90,4 +92,44 @@
      }
     </div>
   </section>
+  }
+
+@if (isSubQuiz) {
+  <!-- Popup Overlay -->
+<div class="overlay">
+  <div class="popup-container">
+    
+    <!-- Header -->
+    <div class="popup-header">
+      <h2 class="popup-title">Quiz Challenger</h2>
+      <button class="close-btn" (click)="getSubQuizCard(false)">✖</button>
+    </div>
+
+    <!-- Controls -->
+    <div class="top-controls">
+      <input type="text" placeholder="Search quizzes..." class="search-input" />
+      <select class="search-dropdown">
+        <option value="">All Levels</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+
+    <!-- Content -->
+    <div class="quiz-row">
+      <div class="quiz-card" *ngFor="let quiz of quizzes">
+        <h3 class="quiz-title">{{ quiz.title }}</h3>
+        <p><strong>Level:</strong> {{ quiz.level }}</p>
+        <p><strong>Questions:</strong> {{ quiz.questions }}</p>
+        <p><strong>Timer:</strong> {{ quiz.timer }} mins</p>
+        <button class="start-btn">Start Quiz</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+}
+
 </div>

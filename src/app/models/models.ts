@@ -62,3 +62,9 @@ export interface ResponseAnswer{
   correctAns:string,
   ans:boolean
 }
+
+export interface SubSubject{
+  SubSubjectId:number
+  SubsubjectName:string
+  SubjectId:string
+}
