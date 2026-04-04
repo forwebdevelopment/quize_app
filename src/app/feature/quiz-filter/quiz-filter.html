@@ -74,7 +74,7 @@
   </aside>
 
 
-  @if (true) {
+  @if (!isSubQuiz) {
 
   <section class="quiz-results">
     <h3>Filtered Quizzes</h3>
@@ -95,17 +95,31 @@
   }
 
 @if (isSubQuiz) {
+
+  
+  <section class="quiz-results">
+    <h3>Filtered Quizzes  <span class="btn-back" (click)="getSubQuizCard(false)">Back To Subject</span>  </h3>
+    <div class="quiz-main" >
+      @for (quiz of quizzes; track $index) {
+       <div class="quiz-card"  >
+         <h4>{{ quiz.title }}</h4>
+         <p>Category: {{ quiz.level }}</p>
+         <p>Level: {{ quiz.title }}</p>
+         <p>Number of Questions: {{ numberOfQuestions }}</p>
+         
+       </div>
+     }
+    </div>
+  </section>
   <!-- Popup Overlay -->
-<div class="overlay">
+<!-- <div class="overlay">
   <div class="popup-container">
     
-    <!-- Header -->
     <div class="popup-header">
       <h2 class="popup-title">Quiz Challenger</h2>
       <button class="close-btn" (click)="getSubQuizCard(false)">✖</button>
     </div>
 
-    <!-- Controls -->
     <div class="top-controls">
       <input type="text" placeholder="Search quizzes..." class="search-input" />
       <select class="search-dropdown">
@@ -116,7 +130,6 @@
       </select>
     </div>
 
-    <!-- Content -->
     <div class="quiz-row">
       <div class="quiz-card" *ngFor="let quiz of quizzes">
         <h3 class="quiz-title">{{ quiz.title }}</h3>
@@ -128,7 +141,7 @@
     </div>
 
   </div>
-</div>
+</div> -->
 
 }
 

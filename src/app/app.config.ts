@@ -4,9 +4,11 @@ import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { interceptorInterceptor } from './core/interceptor-interceptor';
-import { provideStore } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { subsubjectReducer } from './core/reducer/subsubject.reducer';
+import { SubSubjectEffects } from './core/effect/subsubject.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +21,9 @@ export const appConfig: ApplicationConfig = {
     }), // Toastr providers
     provideHttpClient(withInterceptors([interceptorInterceptor])),
     provideStore(),
-    provideEffects(),
+     provideState('subsubjects', subsubjectReducer),
+    provideEffects([SubSubjectEffects]),
+   
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
 ]
 };

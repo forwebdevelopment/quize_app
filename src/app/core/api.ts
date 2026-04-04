@@ -53,6 +53,7 @@ export class Api{
 
 
       GetSubSubject(subjectId : number):Observable<SubSubject[]>{
+        alert("api call")
         const url = `${this.apiUrl}Tenant/subsubject?SubjectId=${subjectId}`
         return this.http.get<SubSubject[]>(url)
       }

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 
 import { Actions , ofType ,createEffect } from "@ngrx/effects";
 //import { SubSubjectService } from './subsubject.service';
@@ -13,11 +13,13 @@ import { Api } from "../api";
 @Injectable()
 
 export class SubSubjectEffects{
-
+   private actions$: Actions = inject(Actions)
+    private service: Api = inject(Api)
+    private store: Store= inject(Store)
   constructor(
-    private actions$: Actions,
-    private service: Api,
-    private store: Store
+    // private actions$: Actions,
+    // private service: Api,
+    // private store: Store
   ) {}
 
 
