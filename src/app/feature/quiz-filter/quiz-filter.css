@@ -30,8 +30,7 @@
   flex: 1;
 }
 
-.quiz-card {
-  background: #f9f9f9;
+.quiz-card {  
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 6px;
@@ -40,6 +39,10 @@
 .quiz-main {
   overflow: auto;
   height: calc(100vh - 154px);
+}
+
+.quiz-card:hover{
+  background: #d7dce0;
 }
 
 .btn-back{
