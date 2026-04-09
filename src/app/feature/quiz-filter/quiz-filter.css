@@ -58,3 +58,31 @@
     
 }
 
+.btn-back:hover{
+  cursor: pointer;
+}
+select[name="syllabus"] {
+  width: 100%;              /* full width of container */
+  max-width: 400px;         /* optional limit */
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+/* Ensure dropdown list stays inside viewport */
+select[name="syllabus"] option {
+  white-space: normal;      /* allow wrapping of long text */
+  padding: 6px;
+}
+
+/* For very long lists, force scroll inside dropdown */
+select[name="syllabus"] {
+  overflow-y: auto;
+  max-height: 250px;        /* dropdown height limit */
+}
+.syllabus-check:focus {
+  outline: none;
+}

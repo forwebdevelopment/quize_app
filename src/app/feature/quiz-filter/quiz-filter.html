@@ -3,6 +3,7 @@
     <h2>Filter Quizzes</h2>
 
     <!-- Category -->
+     @if (!isSubQuiz) {
     <label>Category:</label>
     <select [(ngModel)]="filters.category" name="category" (ngModelChange)="onChangeCateory()">
         <option disabled>Select Category</option>
@@ -12,10 +13,10 @@
         }
       
     </select>
-
+  }
     <!-- Level -->
 
-        @if (isTech) {
+        @if (isTech && !isSubQuiz) {
     <label>Level:</label>
     <select [(ngModel)]="filters.level" name="level" (change)="onChangeLevel()">
        <option disabled>Select Level</option>
@@ -31,9 +32,10 @@
 }
  
 
+
     <!-- Syllabus -->
-     @if (filters.category!='Select Category') {
-    <label>Syllabus:</label>
+     @if (filters.category!='Select Category' && !isSubQuiz) {
+    <label for="syllabus">Syllabus:</label>
     <select [(ngModel)]="filters.syllabus" name="syllabus" (change)="onChangeSyllabus()">
       <option disabled>Select Syllabus</option>
         @for (item of this.sharedService.TenantData()?.subjects; track $index) {
@@ -41,8 +43,25 @@
            <option [value]="item.subject_Name">{{item.subject_Name}}</option>
            }
         }
-    </select>
+     </select>
      }
+
+
+   @if (isSubQuiz) {
+  <label for="syllabus">Syllabus:</label>
+  <select
+    [(ngModel)]="SelectSubSubject"
+    name="syllabus" class="syllabus-check"
+    (change)="onChangeSubSyllabus()"
+  >
+    <option disabled>Select Syllabus</option>
+    <option value="all">All</option>
+
+    @for (item of quizzes; track item.subSubjectId) {
+      <option [value]="item.subSubjectId">{{ item.title }}</option>
+    }
+  </select>
+}
 
 
     <label>Number of quiz</label>
@@ -50,7 +69,7 @@
       <option value="10">10</option>
       <option value="25">25</option>
       <option value="50">50</option>
-      <option value="100">100</option>
+      <!-- <option value="100">100</option> -->
      </select>
 
 
@@ -80,7 +99,7 @@
     <h3>Filtered Quizzes</h3>
     <div class="quiz-main" >
       @for (quiz of this.sharedService.TenantData()?.card; track $index) {
-       <div class="quiz-card"  (click)="getSubQuizCard(true)">
+       <div class="quiz-card"  (click)="getSubQuizCard(true ,quiz.subject ,  quiz.levelName )">
          <h4>{{ quiz.heading }}</h4>
          <p>Category: {{ quiz.catName }}</p>
          <p>Level: {{ quiz.levelName }}</p>
@@ -98,13 +117,13 @@
 
   
   <section class="quiz-results">
-    <h3>Filtered Quizzes  <span class="btn-back" (click)="getSubQuizCard(false)">Back To Subject</span>  </h3>
+    <h3>Filtered Quizzes  <span class="btn-back" (click)="BackToMainSubject(false)">Back</span>  </h3>
     <div class="quiz-main" >
-      @for (quiz of quizzes; track $index) {
-       <div class="quiz-card"  >
+      @for (quiz of filteredSubSubject; track $index) {
+       <div class="quiz-card" (click)="getQuiz(quiz)" >
          <h4>{{ quiz.title }}</h4>
-         <p>Category: {{ quiz.level }}</p>
-         <p>Level: {{ quiz.title }}</p>
+         <!-- <p>Category: {{ quiz.level }}</p> -->
+         <p>Level: {{ quiz.level }}</p>
          <p>Number of Questions: {{ numberOfQuestions }}</p>
          
        </div>

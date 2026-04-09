@@ -9,6 +9,7 @@ import { QuizResponse, SubmitAnswer, TenantData } from '../models/models';
 export class Shared {
   isQuizFiltered = signal(false)
   isTimerEnable = signal(false)
+   AnswerReponse:any=undefined;
   Category = signal("non")
   Time = signal(0)
   NumberOfQuestion = signal(10);

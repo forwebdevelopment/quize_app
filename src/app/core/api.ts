@@ -40,8 +40,8 @@ export class Api{
 
 
 
-    GetQuizByFilter(levelID:number , subjectId:number , numberofquiz:number){
-        const url = `${this.apiUrl}QuizUser/getquiz/?levelId=${levelID}&subjectId=${subjectId}&NumberQuize=${numberofquiz}`
+    GetQuizByFilter(levelID:number , subjectId:number , numberofquiz:number , subSubjectId:number){
+        const url = `${this.apiUrl}QuizUser/getquiz/?levelId=${levelID}&subjectId=${subjectId}&subSubjectId=${subSubjectId}&NumberQuize=${numberofquiz}`
         return this.http.get(url)
     }
 
@@ -53,7 +53,6 @@ export class Api{
 
 
       GetSubSubject(subjectId : number):Observable<SubSubject[]>{
-        alert("api call")
         const url = `${this.apiUrl}Tenant/subsubject?SubjectId=${subjectId}`
         return this.http.get<SubSubject[]>(url)
       }

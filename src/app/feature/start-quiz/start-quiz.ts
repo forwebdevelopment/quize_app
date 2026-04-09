@@ -1,4 +1,4 @@
-import { Component, inject , ChangeDetectorRef  } from '@angular/core';
+import { Component, inject , ChangeDetectorRef ,AfterViewInit  } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Shared } from '../../shared/shared';
@@ -30,10 +30,11 @@ export class StartQuiz {
   isOpen:boolean = false
   selectedOption: string | null = null;
   AtteptQuestion:number = 0
+  totalMinut=0
   isReview:boolean = false;
-url:string = "https://anotepad.com/note/read/ipwpq3xd"
-safeUrl!: SafeResourceUrl;
-
+  currentQueId:number=0;
+  url:string = "https://anotepad.com/note/read/ipwpq3xd"
+  safeUrl!: SafeResourceUrl;
   isTimerEnable:boolean = this.sharedService.isTimerEnable()
    
 
@@ -42,6 +43,11 @@ safeUrl!: SafeResourceUrl;
 debugger
  this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
 
+
+if(this.sharedService.answerMark.length>0){
+  this.selectedOption=this.sharedService.answerMark[0].option
+}
+console.log(this.sharedService.answerMark)
 
 this.activeRoute.fragment.subscribe(fragment => {
    this.isReview = fragment === 'review';
@@ -66,7 +72,16 @@ this.questions=[]
     }
 
   }
-totalMinut=0
+
+
+
+  ngAfterViewInit(){
+ if(this.sharedService.AnswerReponse){
+  this.currentQueId=this.sharedService.answerMark[0].qid
+  this.HighLightAnswer()
+ }
+  }
+
   startTime(){
 
    var intervalID = setTimeout(() => {
@@ -129,32 +144,55 @@ totalMinut=0
   }
 
   nextQuestion() {
+
+    
+
     if (this.currentQuestion < this.totalQuestions) {
       this.currentQuestion++;
       this.question = this.questions[this.currentQuestion-1]
          
      var index = this.sharedService.answerMark.findIndex(x=>x.currentQuestion == this.currentQuestion)
      if(index>-1){
-          this.selectedOption=this.sharedService.answerMark[index].option
+          var currentQue:any = this.sharedService.answerMark[index];
+          this.selectedOption=currentQue.option
+          this.currentQueId = currentQue.qid;
      }
+    }
+    if(this.sharedService.AnswerReponse && this.sharedService.AnswerReponse.length>0){
+      setTimeout(() => {
+        this.HighLightAnswer()
+      }, 25);
+      
     }
   }
 
   previousQuestion() {
+    
     if (this.currentQuestion > 1) {
       this.currentQuestion--;
         this.question = this.questions[this.currentQuestion-1]
         
      var index = this.sharedService.answerMark.findIndex(x=>x.currentQuestion == this.currentQuestion)
      if(index>-1){
-          this.selectedOption=this.sharedService.answerMark[index].option
+          // this.selectedOption=this.sharedService.answerMark[index].option
+          var currentQue:any = this.sharedService.answerMark[index];
+          this.selectedOption=currentQue.option
+          this.currentQueId = currentQue.qid;
      }
     }
+    if(this.sharedService.AnswerReponse && this.sharedService.AnswerReponse.length>0){
+      setTimeout(() => {
+         this.HighLightAnswer()
+      }, 25);
+     
+    }
   }
+
 
   submitQuiz(){
 
     this.api.CheckAnswer(this.sharedService.answerSeat).subscribe((data:any)=>{
+      this.sharedService.AnswerReponse = data.data;
            let  numbercurrectAns = data.data.filter((a:any)=>a.ans).length
            this.sharedService.NumberOfCurrectQuestion.set(numbercurrectAns)
            console.log(this.sharedService.NumberOfCurrectQuestion())
@@ -165,7 +203,26 @@ totalMinut=0
   }
 
 
+  exitReview(){
+    this.routs.navigate(['/quizcard'])
+  }
   openPopup(isOpenP:boolean){
       this.isOpen = isOpenP
+  }
+
+  HighLightAnswer(){
+    this.sharedService.AnswerReponse.forEach((element:any) => {
+
+      var d =   document.getElementById(element.correctAns) as HTMLUListElement;
+      if(d!=null && this.currentQueId==element.qid){
+        d.style.backgroundColor ='#b4ffb4'
+        d.style.borderColor='green'
+      }else if(d!=null){
+           d.style.backgroundColor =''
+        d.style.borderColor=''
+      }
+         
+    });
+   
   }
 }

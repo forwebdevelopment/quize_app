@@ -7,9 +7,9 @@
 
   <div class="question-block">
     
-    <h2>Q{{ currentQuestion }}. {{ question.text }}  @if(this.isReview){ <button  (click)="openPopup(true)">View Definiton</button>}</h2>
+    <h2>Q{{ currentQuestion }}. {{ question.text }}  @if(false){ <button  (click)="openPopup(true)">View Definiton</button>}</h2>
     <ul class="options-list">
-      <li *ngFor="let option of question.options"
+      <li *ngFor="let option of question.options" [id]="option"
           [class.selected]="selectedOption === option"
           (click)="selectOption(option ,question.queNo , currentQuestion)">
         {{ option }}
@@ -23,9 +23,13 @@
     @if ( this.totalQuestions!=this.currentQuestion && !this.isReview ) {
         <button (click)="submitQuiz()" [disabled]="AtteptQuestion==0">Submit Quiz</button>
     }
-    @if ( this.totalQuestions==this.currentQuestion ) {
+    @if ( this.isReview ) {
+        <button (click)="exitReview()">Exist Review</button>
+    }
+    @if ( this.totalQuestions==this.currentQuestion && !this.isReview) {
         <button (click)="submitQuiz()">Submit Quiz</button>
     }@else{
+         
         <button (click)="nextQuestion()">Next</button>
       }
    
